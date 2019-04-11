@@ -726,7 +726,7 @@ function wmediumd {
       rm -r wmediumd
     fi
     $install git make libevent-dev libconfig-dev libnl-3-dev libnl-genl-3-dev
-    git clone --depth=1 -b mininet-wifi https://github.com/ramonfontes/wmediumd.git
+    git clone --depth=1 -b mininet-wifi https://github.com/another-s347/wmediumd.git
     pushd $BUILD_DIR/wmediumd
     sudo make install
     popd
