@@ -1081,6 +1081,7 @@ class adhoc(IntfWireless):
                 if 'ht_cap' in params:
                     ht_cap = params['ht_cap']
                 self.join('ibss', ssid, freq, ht_cap)
+        self.getMAC()
 
     def setSecuredAdhoc(self, node, wlan, **params):
         "Set secured adhoc"
@@ -1102,6 +1103,10 @@ class adhoc(IntfWireless):
         pidfile = "mn%d_%s_%s_wpa.pid" % (os.getpid(), node.name, wlan)
         intf = node.params['wlan'][wlan]
         self.wpa_cmd(pidfile, intf, wlan)
+    
+    def getMAC(self):
+        ret=self.pexec("iw dev %s info" % self.name)
+        self.mac=ret[0].split('\n\t')[3].split(' ')[1]
 
 
 class mesh(IntfWireless):
