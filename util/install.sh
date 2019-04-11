@@ -163,7 +163,7 @@ function mn_deps {
           python-setuptools python-pexpect python-tk
     fi
 
-    sudo git clone --depth=1 https://github.com/mininet/mininet.git
+    sudo git clone --depth=1 https://github.com/another-s347/mininet.git
     pushd $MININET_DIR/mininet-wifi/mininet
     sudo python=${python} make install
     popd
