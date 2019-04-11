@@ -457,11 +457,11 @@ class Mininet_wifi(Mininet):
             isAP=False
             if isinstance(node1, AP):
                 isAP=True
-            cls(node=node1, isAP=isAP, **params)
+            return cls(node=node1, isAP=isAP, **params)
         elif cls == adhoc:
-            cls(node=node1, link=self.link, **params)
+            return cls(node=node1, link=self.link, **params)
         elif cls == ITSLink:
-            cls(node=node1, link=self.link, **params)
+            return cls(node=node1, link=self.link, **params)
         elif cls == wifiDirectLink or cls == physicalWifiDirectLink:
             link = cls(node=node1, port=port1, **params)
             return link
