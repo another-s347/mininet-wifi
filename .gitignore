@@ -11,3 +11,6 @@ dist
 doc/html
 doc/latex
 trunk
+.idea
+Cargo.lock
+target/

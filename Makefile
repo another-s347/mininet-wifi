@@ -3,6 +3,8 @@ MININET_WIFI = mn_wifi/*.py
 TEST = mn_wifi/test/*.py
 EXAMPLES = mn_wifi/examples/*.py
 MN = bin/mn
+MNTOOL = mntool/target/debug/mntool
+MNTOOL_TOML = ./mntool/Cargo.toml
 PYTHON ?= python
 PYMN = $(PYTHON) -B bin/mn
 BIN = $(MN)
@@ -15,6 +17,7 @@ BINDIR ?= $(PREFIX)/bin
 MANDIR ?= $(PREFIX)/share/man/man1
 DOCDIRS = doc/html doc/latex
 PDF = doc/latex/refman.pdf
+CARGO = cargo +nightly
 
 CFLAGS += -Wall -Wextra
 
@@ -22,6 +25,7 @@ all: codecheck test
 
 clean:
 	rm -rf build dist *.egg-info *.pyc $(MNEXEC) $(MANPAGES) $(DOCDIRS)
+	$(CARGO) clean --manifest-path $(MNTOOL_TOML)
 
 codecheck: $(PYSRC)
 	-echo "Running code check"
@@ -49,13 +53,19 @@ slowtest: $(MININET_WIFI)
 mnexec: mnexec.c $(MN) mn_wifi/net.py
 	cc $(CFLAGS) $(LDFLAGS) -DVERSION=\"`PYTHONPATH=. $(PYMN) --version`\" $< -o $@
 
+mntool: 
+	$(CARGO) build --manifest-path $(MNTOOL_TOML)
+
+install-mntool: $(MNTOOL)
+	install -D $(MNTOOL) $(BINDIR)/mntool
+
 install-mnexec: $(MNEXEC)
 	install -D $(MNEXEC) $(BINDIR)/$(MNEXEC)
 
 install-manpages: $(MANPAGES)
 	install -D -t $(MANDIR) $(MANPAGES)
 
-install: install-mnexec install-manpages
+install: install-mnexec install-manpages install-mntool
 	$(PYTHON) setup.py install
 
 develop: $(MNEXEC) $(MANPAGES)
@@ -74,7 +84,7 @@ mnexec.1: mnexec
 	help2man -N -n "execution utility for Mininet." \
 	-h "-h" -v "-v" --no-discard-stderr ./$< -o $@
 
-.PHONY: doc
+.PHONY: doc mntool
 
 doc: man
 	doxygen doc/doxygen.cfg

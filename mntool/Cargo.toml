@@ -1,0 +1,10 @@
+[package]
+name = "mntool"
+version = "0.1.0"
+authors = ["skye"]
+edition = "2018"
+
+[dependencies]
+libc = "0.2"
+structopt = { version = "0.2", default-features = false }
+pnet="0.22"
